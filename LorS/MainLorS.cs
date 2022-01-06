@@ -8,6 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 // Class that formats the gamedata
 //
 [System.Serializable]
@@ -26,23 +27,39 @@ class SaveData {
 public class MainLorS: MonoBehaviour
 {
     
+    
     // Start is called before the first frame update
     void Start()
     {
+        string path = Application.persistentDataPath+"/Saves";
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
         Text welcome = GameObject.Find("welcome").GetComponent<Text>();// Finding the text object
-        string path = Application.persistentDataPath;
 
         if (MainData.LorS){ // If the its load scene then make text load or else make text 
            welcome.text = "Load";
            
             FindFiles(path);
             
+            // Add loadButtonHandler to all the buttons 
+            // use for loop 
+            int i;
+            for ( i=0; i<(17-1);i++ )
+            {
+                string x= (i+1).ToString();
+                Button my_button= GameObject.Find("Load"+x).GetComponent<Button>();
+                my_button.onClick.AddListener(loadButtonHandler);
+
+            }
      }
         else{
             welcome.text = "Save";
                 
             FindFiles(path);
             // for loop for adding handler to all the buttons 
+            
 
             int i;
             for ( i=0; i<(17-1);i++ )
@@ -53,7 +70,31 @@ public class MainLorS: MonoBehaviour
 
             }
         }
-        
+
+    }
+    void loadButtonHandler()
+    {
+        // check if the button is not empty
+        // if its empty do nothing 
+        // if its not empty load the file referenced in the button 
+         
+       if (!EventSystem.current.currentSelectedGameObject.GetComponent<Empty>().IsEmpty) 
+
+       {
+           // So the button is not empty so we have to load the file 
+           // find the filename 
+           string filename =  EventSystem.current.currentSelectedGameObject.name;
+           // using regular expression extract the number
+           filename = Regex.Replace(filename, "[^0-9]","");
+           filename = "Save"+filename;
+           Load(filename);
+           SceneManager.LoadScene(1,LoadSceneMode.Single);
+           
+           
+
+
+           
+       }
 
     }
     void saveButtonHandler()
@@ -78,6 +119,7 @@ public class MainLorS: MonoBehaviour
         filename= Regex.Replace(filename,"[^0-9]","");
         filename= "Save"+filename;
         Save(filename);
+           SceneManager.LoadScene(3,LoadSceneMode.Single);
 
          }
     }
@@ -102,11 +144,16 @@ public class MainLorS: MonoBehaviour
 
     {
 
-        string path = Application.persistentDataPath +"/"+ filename;
+        string path = Application.persistentDataPath+"/Saves" +"/"+ filename;
         FileStream fs = File.Open(path,FileMode.Open);
         BinaryFormatter formatter = new BinaryFormatter();
         SaveData  data = formatter.Deserialize(fs) as SaveData;
         fs.Close();
+        GameData.Choices = data.Choices;
+        GameData.currentScene = data.currentScene;
+        GameData.LineNum = data.LineNum;
+
+
 
 
         
@@ -114,8 +161,9 @@ public class MainLorS: MonoBehaviour
     void Save(string filename) // This function Saves the data in a filename given 
     {
         
+        Debug.Log(GameData.LineNum);
         SaveData data= new SaveData(GameData.Choices, GameData.currentScene, GameData.LineNum); //Instance of save file 
-        string path = Application.persistentDataPath +"/"+ filename;
+        string path = Application.persistentDataPath+"/Saves" +"/"+ filename;
         FileStream fs = File.Open(path, FileMode.Create);
         BinaryFormatter formatter = new BinaryFormatter();
         

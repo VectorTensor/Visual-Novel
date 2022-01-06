@@ -32,6 +32,9 @@ public class LoadLogic : MonoBehaviour
         MainData.LorS = true;        
 
         }
-        SceneManager.LoadScene(3,LoadSceneMode.Single);
+        MainData.prevScene = SceneManager.GetActiveScene().buildIndex;
+            
+            SceneManager.LoadScene(3,LoadSceneMode.Single);
+        
     }
 }

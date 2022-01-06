@@ -43,13 +43,18 @@ public class ButtonLogic : MonoBehaviour
     }
     void playListener()// Listener for the play button
     {
-        SceneManager.LoadScene(1, LoadSceneMode.Single);
+
         //Add the default gamedata to play game from begining 
+        GameData.currentScene = 1;
+        GameData.LineNum =1 ;
+        MainData.prevScene = SceneManager.GetActiveScene().buildIndex; 
+        SceneManager.LoadScene(1, LoadSceneMode.Single);
 
     }
     void optionListener() // Listener for the option button
     {
 
+        MainData.prevScene = SceneManager.GetActiveScene().buildIndex; 
         SceneManager.LoadScene(2, LoadSceneMode.Single);
 
     }
@@ -57,6 +62,7 @@ public class ButtonLogic : MonoBehaviour
     {
         MainData.LorS = true;// LorS = True means Load is selected 
 
+        MainData.prevScene = SceneManager.GetActiveScene().buildIndex; 
         SceneManager.LoadScene(3,LoadSceneMode.Single);
     }
     void quitListener() // Listener for the quit button

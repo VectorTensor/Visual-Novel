@@ -13,9 +13,14 @@ public class Controller : MonoBehaviour
     List<int> Choices;
     int LineNum;
     int currentScene;
-    void Start()
+   void Start()
     {
         Parser = GameObject.Find("Master").GetComponent<parser>();// Initializing parser and game data object
+        // Debug code 
+        Debug.Log("here are the new line num and currentsene"); 
+        Debug.Log(GameData.LineNum);
+        Debug.Log(GameData.currentScene);
+     
         
         Choices = GameData.Choices;// Getting the initial data from the gamedata
         LineNum = GameData.LineNum;
@@ -32,7 +37,6 @@ public class Controller : MonoBehaviour
             setDialogue(dialogue);
             setPose(pose);
             LineNum++;
-            GameData.LineNum = LineNum;
 
 
         
@@ -42,8 +46,9 @@ public class Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown("space"))
         {
+            GameData.LineNum = LineNum;
             Name = Parser.GetName(LineNum);
             dialogue = Parser.GetDialogue(LineNum);
 
@@ -52,7 +57,6 @@ public class Controller : MonoBehaviour
             setDialogue(dialogue);
             setPose(pose);
             LineNum++;
-            GameData.LineNum = LineNum;
             
 
             
@@ -77,7 +81,6 @@ public class Controller : MonoBehaviour
        Image character = GameObject.Find("Character").GetComponent<Image>();
        string path = "Characters/"+Name+"/"+filename;
        Sprite temp = Resources.Load<Sprite>(path); 
-       Debug.Log(path);
        character.sprite = temp; 
     }
 

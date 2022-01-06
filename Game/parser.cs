@@ -42,9 +42,12 @@ public class parser : MonoBehaviour
                 }
 
         }while(data!= "$$");
-           fs.Close();
+          
 
        }
+ fs.Close();
+// Debug.Log(" from parser.cs number of lines ");
+//Debug.Log(Lines.Count);
 
 
     }
@@ -55,7 +58,7 @@ public class parser : MonoBehaviour
     }
     public  string GetName(int num )
     {
-        if (num<Lines.Count)
+        if (num<=Lines.Count)
         {
             return Lines[num-1].Name;
         }
@@ -64,7 +67,7 @@ public class parser : MonoBehaviour
     }
      public string GetDialogue(int num)
     {
-        if (num< Lines.Count)
+        if (num<= Lines.Count)
         {
             return Lines[num-1].Dialogue;
 
@@ -74,7 +77,7 @@ public class parser : MonoBehaviour
 
      public int GetPose(int num)
     {
-        if (num < Lines.Count)
+        if (num <= Lines.Count)
         {
             return Lines[num-1].pose;
         }
